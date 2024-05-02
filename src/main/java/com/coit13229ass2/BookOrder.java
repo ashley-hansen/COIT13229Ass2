@@ -4,17 +4,16 @@ package com.coit13229ass2;
 
 public class BookOrder implements Task{
     private int quantity;
-    private float unitPrice;
-    private final int taxRate = 10;
-    private float totalBill;
+    private double unitPrice;
+    private final double taxRate = 10;
+    private double totalBill;
+    private double taxAmount;
 
-    public BookOrder(int quantity, float unitPrice) {
+    public BookOrder(int quantity, double unitPrice) {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
 
     }
-    
-    
 
     public int getQuantity() {
         return quantity;
@@ -24,26 +23,49 @@ public class BookOrder implements Task{
         this.quantity = quantity;
     }
 
-    public float getUnitPrice() {
+    public double getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(float unitPrice) {
+    public void setUnitPrice(double unitPrice) {
         this.unitPrice = unitPrice;
     }
+
+    public double getTotalBill() {
+        return totalBill;
+    }
+
+    public void setTotalBill(double totalBill) {
+        this.totalBill = totalBill;
+    }
+
+    public double getTaxAmount() {
+        return taxAmount;
+    }
+
+    public void setTaxAmount(double taxAmount) {
+        this.taxAmount = taxAmount;
+    }
+    
+    
+
+    
     
 //Calculate tax amount
-    public float executeTask(){
+    @Override
+    public double executeTask(){
     
-    float taxAmount = (quantity * unitPrice)*(taxRate/100);
+    taxAmount = (quantity * unitPrice)*(taxRate/100);
     totalBill = taxAmount + (quantity * unitPrice);
     return totalBill;
     }
     
     public String getResult(){
-    
-        return "The total bill for this order is" + totalBill;
+        
+        return "The total bill for this order is " + executeTask();
     }
+    
+    
 
     
     
