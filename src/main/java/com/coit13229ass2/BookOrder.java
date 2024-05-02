@@ -1,8 +1,9 @@
-
 package com.coit13229ass2;
 
+import java.io.Serializable;
 
-public class BookOrder implements Task{
+public class BookOrder implements Task, Serializable {
+
     private int quantity;
     private double unitPrice;
     private final double taxRate = 10;
@@ -46,28 +47,19 @@ public class BookOrder implements Task{
     public void setTaxAmount(double taxAmount) {
         this.taxAmount = taxAmount;
     }
-    
-    
 
-    
-    
 //Calculate tax amount
     @Override
-    public double executeTask(){
-    
-    taxAmount = (quantity * unitPrice)*(taxRate/100);
-    totalBill = taxAmount + (quantity * unitPrice);
-    return totalBill;
-    }
-    
-    public String getResult(){
-        
-        return String.format("The total bill for this order is %.2f" , executeTask());
-    }
-    
-    
+    public double executeTask() {
 
-    
-    
-    
+        taxAmount = (quantity * unitPrice) * (taxRate / 100);
+        totalBill = taxAmount + (quantity * unitPrice);
+        return totalBill;
+    }
+
+    public String getResult() {
+
+        return String.format("The total bill for this order is %.2f", executeTask());
+    }
+
 }
