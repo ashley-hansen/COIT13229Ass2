@@ -59,6 +59,6 @@ public class MovieOrder implements Task {
     
     public String getResult(){
     
-        return "The total bill for this order is " + executeTask();
+        return String.format("The total bill for this order is %.2f" , executeTask());
     }
 }
