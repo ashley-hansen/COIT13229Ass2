@@ -11,6 +11,8 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServerCoordinator {
 
@@ -53,7 +55,20 @@ class ClientConnection extends Thread {
             clientInput = new ObjectInputStream(clientSocket.getInputStream());
             clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
 
-            String test = "this is a test message mate!";
+            
+
+            //starts server thread
+            this.start();
+        } catch (IOException e) {
+            System.out.println("Connection:" + e.getMessage());
+        } 
+
+    }
+
+    //run method starts thread
+    public void run() {
+        try {
+        String test = "this is a test message mate!";
             String orderType = (String) clientInput.readObject();
             if (orderType.equals("book")) {
                 BookOrder bo = (BookOrder) clientInput.readObject();
@@ -67,21 +82,14 @@ class ClientConnection extends Thread {
                 System.out.println(orderType);
                 System.out.println(mo.getResult());
             }
+        
             clientOutput.writeObject(test);
-            System.out.println("stage reached!");
-
-            //starts server thread
-            this.start();
-        } catch (IOException e) {
-            System.out.println("Connection:" + e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (IOException ex) {
+            Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }catch(ClassNotFoundException e){
             e.printStackTrace();
         }
-
-    }
-
-    //run method starts thread
-    public void run() {
+            System.out.println("stage reached!");
 
     }
 
