@@ -57,6 +57,6 @@ public class MovieOrder implements Task, Serializable {
 
     public String getResult() {
 
-        return String.format("The total bill for this order is %.2f", executeTask());
+        return String.format("The total bill for this movie order is $%.2f", executeTask());
     }
 }
