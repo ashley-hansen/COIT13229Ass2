@@ -1,5 +1,6 @@
 package com.coit13229ass2;
 
+import com.coit13229ass2.Task;
 import java.io.Serializable;
 
 public class MovieOrder implements Task, Serializable {

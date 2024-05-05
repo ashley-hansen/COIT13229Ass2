@@ -1,4 +1,3 @@
-
 package com.coit13229ass2;
 
 import java.io.IOException;
@@ -7,14 +6,13 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
 public class ServerMovie {
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         try {
             //Set Socket port number
-            int serverPort = 7611;
-            int serverBookPort = 7622;
-            int serverMoviePort = 7633;
+            int serverPort = 7633;
+
             ServerSocket listenSocket = new ServerSocket(serverPort);
             //create connection object utilising thread for multiple concurrent connections
             while (true) {
@@ -30,6 +28,7 @@ public class ServerMovie {
 }//End of class
 
 class ClientMovieConnection extends Thread {
+
     //initialise in and out data streams
     ObjectInputStream input;
     ObjectOutputStream output;
@@ -48,14 +47,19 @@ class ClientMovieConnection extends Thread {
         }
 
     }
+
     //run method starts thread
     public void run() {
 
-        boolean running = true;
+        try{
+            MovieOrder order = (MovieOrder) input.readObject();
+            String orderTotal = order.getResult();
+            output.writeObject(orderTotal);
+            }catch(ClassNotFoundException e){
+                e.printStackTrace();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
 
-        System.out.println("Hello World!");
-
-  
     }
-
 }

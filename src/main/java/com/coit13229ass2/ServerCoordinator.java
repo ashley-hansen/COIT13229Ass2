@@ -38,14 +38,10 @@ public class ServerCoordinator {
 class ClientConnection extends Thread {
 
     //initialise in and out data streams
-    int serverBookPort = 7622;
-    int serverMoviePort = 7633;
+
     ObjectInputStream clientInput;
     ObjectOutputStream clientOutput;
-    ObjectInputStream serverBookInput;
-    ObjectOutputStream serverBookOutput;
-    ObjectInputStream serverMovieInput;
-    ObjectOutputStream serverMovieOutput;
+
 
     Socket clientSocket;
     Socket bookServerSocket;
@@ -73,14 +69,13 @@ class ClientConnection extends Thread {
             String orderType = (String) clientInput.readObject();
             if (orderType.equals("book")) {
                 BookOrder bo = (BookOrder) clientInput.readObject();
-                String messageToClient = sendToBookServer(bo) + "\n";
-                clientOutput.writeObject(messageToClient);
+                String bookMessage = sendToBookServer(bo) + "\n";
+                clientOutput.writeObject(bookMessage);
             }
             if (orderType.equals("movie")) {
                 MovieOrder mo = (MovieOrder) clientInput.readObject();
-
-                System.out.println(orderType);
-                System.out.println(mo.getResult());
+                String movieMessage = sendToMovieServer(mo) + "\n";
+                clientOutput.writeObject(movieMessage);
             }
 
             clientOutput.writeObject(test);
@@ -102,6 +97,20 @@ class ClientConnection extends Thread {
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
         out.writeObject(bookOrder);
+        String recievedMessage = (String) in.readObject();
+
+        return recievedMessage;
+    }
+    
+        public String sendToMovieServer(MovieOrder movieOrder) throws IOException, ClassNotFoundException {
+        ObjectInputStream in = null;
+        ObjectOutputStream out = null;
+
+        int serverPort = 7633;
+        Socket socket = new Socket("localhost", serverPort);
+        out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
+        out.writeObject(movieOrder);
         String recievedMessage = (String) in.readObject();
 
         return recievedMessage;
