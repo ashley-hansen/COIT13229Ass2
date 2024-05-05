@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class OrderClient {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
         Socket socket = null;
         int quantity;
         int unitPrice;
@@ -39,7 +39,8 @@ public class OrderClient {
                         String bookOrder = "book";
                         out.writeObject(bookOrder);
                         out.writeObject(bo);
-                        System.out.println(bo.getResult());
+                        String orderTotal = (String) in.readObject();
+                        System.out.println(orderTotal);
                     }
                     else if((orderType)== 2){
                        System.out.println("please enter the order qty: \n");

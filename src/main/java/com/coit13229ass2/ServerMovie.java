@@ -19,7 +19,7 @@ public class ServerMovie {
             //create connection object utilising thread for multiple concurrent connections
             while (true) {
                 Socket clientSocket = listenSocket.accept();
-                ClientConnection connection = new ClientConnection(clientSocket);
+                ClientMovieConnection connection = new ClientMovieConnection(clientSocket);
             }
 
         } catch (IOException e) {
@@ -29,13 +29,13 @@ public class ServerMovie {
 
 }//End of class
 
-class ClientConnection extends Thread {
+class ClientMovieConnection extends Thread {
     //initialise in and out data streams
     ObjectInputStream input;
     ObjectOutputStream output;
     Socket clientSocket;
 
-    public ClientConnection(Socket aClientSocket) {
+    public ClientMovieConnection(Socket aClientSocket) {
 
         try {
             clientSocket = aClientSocket;

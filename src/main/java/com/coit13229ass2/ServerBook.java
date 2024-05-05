@@ -1,25 +1,28 @@
 
 package com.coit13229ass2;
 
+
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class ServerBook {
     public static void main(String[] args){
         try {
             //Set Socket port number
-            int serverPort = 7611;
-            int serverBookPort = 7622;
-            int serverMoviePort = 7633;
+            int serverPort = 7622;
+
             ServerSocket listenSocket = new ServerSocket(serverPort);
             //create connection object utilising thread for multiple concurrent connections
             while (true) {
                 Socket clientSocket = listenSocket.accept();
-                ClientConnection connection = new ClientConnection(clientSocket);
+                ClientBookConnection connection = new ClientBookConnection(clientSocket);
             }
 
         } catch (IOException e) {
@@ -29,13 +32,13 @@ public class ServerBook {
 
 }//End of class
 
-class ClientConnection extends Thread {
+class ClientBookConnection extends Thread {
     //initialise in and out data streams
     ObjectInputStream input;
     ObjectOutputStream output;
     Socket clientSocket;
 
-    public ClientConnection(Socket aClientSocket) {
+    public ClientBookConnection(Socket aClientSocket) {
 
         try {
             clientSocket = aClientSocket;
@@ -51,11 +54,15 @@ class ClientConnection extends Thread {
     //run method starts thread
     public void run() {
 
-        boolean running = true;
-
-        System.out.println("Hello World!");
-
-  
+            try{
+            BookOrder order = (BookOrder) input.readObject();
+            String orderTotal = order.getResult();
+            output.writeObject(orderTotal);
+            }catch(ClassNotFoundException e){
+                e.printStackTrace();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
     }
 
 }

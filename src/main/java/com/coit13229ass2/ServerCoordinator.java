@@ -20,8 +20,7 @@ public class ServerCoordinator {
         try {
             //Set Socket port number
             int orderClientPort = 7611;
-            int serverBookPort = 7622;
-            int serverMoviePort = 7633;
+
             ServerSocket listenSocket = new ServerSocket(orderClientPort);
             //create connection object utilising thread for multiple concurrent connections
             while (true) {
@@ -39,6 +38,8 @@ public class ServerCoordinator {
 class ClientConnection extends Thread {
 
     //initialise in and out data streams
+    int serverBookPort = 7622;
+    int serverMoviePort = 7633;
     ObjectInputStream clientInput;
     ObjectOutputStream clientOutput;
     ObjectInputStream serverBookInput;
@@ -47,50 +48,64 @@ class ClientConnection extends Thread {
     ObjectOutputStream serverMovieOutput;
 
     Socket clientSocket;
+    Socket bookServerSocket;
 
     public ClientConnection(Socket aClientSocket) {
 
         try {
             clientSocket = aClientSocket;
+
             clientInput = new ObjectInputStream(clientSocket.getInputStream());
             clientOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-
-            
 
             //starts server thread
             this.start();
         } catch (IOException e) {
             System.out.println("Connection:" + e.getMessage());
-        } 
+        }
 
     }
 
     //run method starts thread
     public void run() {
         try {
-        String test = "this is a test message mate!";
+            String test = "this is a test message mate!";
             String orderType = (String) clientInput.readObject();
             if (orderType.equals("book")) {
                 BookOrder bo = (BookOrder) clientInput.readObject();
-
-                System.out.println(orderType);
-                System.out.println(bo.getResult());
+                String messageToClient = sendToBookServer(bo) + "\n";
+                clientOutput.writeObject(messageToClient);
             }
-            if(orderType.equals("movie")){
+            if (orderType.equals("movie")) {
                 MovieOrder mo = (MovieOrder) clientInput.readObject();
-                
+
                 System.out.println(orderType);
                 System.out.println(mo.getResult());
             }
-        
+
             clientOutput.writeObject(test);
         } catch (IOException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
-        }catch(ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-            System.out.println("stage reached!");
+        System.out.println("stage reached!");
 
     }
 
-}
+    public String sendToBookServer(BookOrder bookOrder) throws IOException, ClassNotFoundException {
+        ObjectInputStream in = null;
+        ObjectOutputStream out = null;
+
+        int serverPort = 7622;
+        Socket socket = new Socket("localhost", serverPort);
+        out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
+        out.writeObject(bookOrder);
+        String recievedMessage = (String) in.readObject();
+
+        return recievedMessage;
+    }
+
+}//end client connection class
+
