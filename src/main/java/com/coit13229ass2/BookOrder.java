@@ -8,11 +8,13 @@ public class BookOrder implements Task, Serializable {
     private double unitPrice;
     private final double taxRate = 10;
     private double totalBill;
-    private double taxAmount;
+    private final double taxAmount;
 
     public BookOrder(int quantity, double unitPrice) {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+        taxAmount = (quantity * unitPrice) * (taxRate / 100);
+        
 
     }
 
@@ -40,19 +42,19 @@ public class BookOrder implements Task, Serializable {
         this.totalBill = totalBill;
     }
 
-    public double getTaxAmount() {
-        return taxAmount;
-    }
+    
 
-    public void setTaxAmount(double taxAmount) {
-        this.taxAmount = taxAmount;
+   
+    public double getTaxAmount() {
+        
+        return taxAmount;
     }
 
 //Calculate tax amount
     @Override
     public double executeTask() {
 
-        taxAmount = (quantity * unitPrice) * (taxRate / 100);
+        
         totalBill = taxAmount + (quantity * unitPrice);
         return totalBill;
     }

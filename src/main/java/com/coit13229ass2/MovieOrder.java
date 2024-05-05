@@ -13,6 +13,7 @@ public class MovieOrder implements Task, Serializable {
     public MovieOrder(int quantity, double unitPrice) {
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+        taxAmount = (quantity * unitPrice) * (taxRate / 100);
     }
 
     public int getQuantity() {
@@ -43,9 +44,7 @@ public class MovieOrder implements Task, Serializable {
         return taxAmount;
     }
 
-    public void setTaxAmount(double taxAmount) {
-        this.taxAmount = taxAmount;
-    }
+
 
     @Override
     public double executeTask() {

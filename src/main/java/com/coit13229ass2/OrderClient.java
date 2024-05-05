@@ -40,6 +40,7 @@ public class OrderClient {
                         out.writeObject(bookOrder);
                         out.writeObject(bo);
                         String orderTotal = (String) in.readObject();
+                        System.out.println("Recieving details from server...");
                         System.out.println(orderTotal);
                     }
                     else if((orderType)== 2){
