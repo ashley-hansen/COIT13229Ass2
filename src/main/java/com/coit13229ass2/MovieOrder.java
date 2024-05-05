@@ -1,8 +1,10 @@
-
 package com.coit13229ass2;
 
+import com.coit13229ass2.Task;
+import java.io.Serializable;
 
-public class MovieOrder implements Task {
+public class MovieOrder implements Task, Serializable {
+
     private int quantity;
     private double unitPrice;
     private final double taxRate = 30;
@@ -46,19 +48,16 @@ public class MovieOrder implements Task {
         this.taxAmount = taxAmount;
     }
 
-    
-    
-    
     @Override
-    public double executeTask(){
-    
-    taxAmount = (quantity * unitPrice)*(taxRate/100);
-    totalBill = taxAmount + (quantity * unitPrice);
-    return totalBill;
+    public double executeTask() {
+
+        taxAmount = (quantity * unitPrice) * (taxRate / 100);
+        totalBill = taxAmount + (quantity * unitPrice);
+        return totalBill;
     }
-    
-    public String getResult(){
-    
-        return String.format("The total bill for this order is %.2f" , executeTask());
+
+    public String getResult() {
+
+        return String.format("The total bill for this movie order is $%.2f", executeTask());
     }
 }
