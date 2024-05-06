@@ -61,6 +61,7 @@ public class OrderClient {
                 } 
                 //checks condition if user wishes to exit order system
                 else if ((orderType) == 3) {
+                    System.out.println("Thank you for using the order system.");
                     moreOrders = false;
                 } else {
                     System.out.println("Please enter a valid option.");
