@@ -26,6 +26,7 @@ public class ServerMovie {
     }//End Main method
 
 }//End of class
+//class to facilitate connection between server coordinator and serverMovie class
 
 class ClientMovieConnection extends Thread {
 
@@ -37,6 +38,7 @@ class ClientMovieConnection extends Thread {
     public ClientMovieConnection(Socket aClientSocket) {
 
         try {
+            //creates socket object and data serialization stream
             clientSocket = aClientSocket;
             input = new ObjectInputStream(clientSocket.getInputStream());
             output = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -51,15 +53,15 @@ class ClientMovieConnection extends Thread {
     //run method starts thread
     public void run() {
 
-        try{
+        try {
             MovieOrder order = (MovieOrder) input.readObject();
-            String orderTotal = order.getResult();
-            output.writeObject(orderTotal);
-            }catch(ClassNotFoundException e){
-                e.printStackTrace();
-            }catch(IOException e){
-                e.printStackTrace();
-            }
+            String orderTotal = order.getResult();//Gets results from book order class
+            output.writeObject(orderTotal);//sends restuls to server coordinator
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }

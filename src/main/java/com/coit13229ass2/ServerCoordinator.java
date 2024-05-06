@@ -1,16 +1,11 @@
 package com.coit13229ass2;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,7 +13,7 @@ public class ServerCoordinator {
 
     public static void main(String[] args) {
         try {
-            //Set Socket port number
+            //Set Socket port number to esblish connection with client
             int orderClientPort = 7611;
 
             ServerSocket listenSocket = new ServerSocket(orderClientPort);
@@ -33,15 +28,14 @@ public class ServerCoordinator {
         }
     }//End Main method
 
-}//End of class
+}//End of main class
+//calss to facilitate server client connection
 
 class ClientConnection extends Thread {
 
     //initialise in and out data streams
-
     ObjectInputStream clientInput;
     ObjectOutputStream clientOutput;
-
 
     Socket clientSocket;
     Socket bookServerSocket;
@@ -65,20 +59,21 @@ class ClientConnection extends Thread {
     //run method starts thread
     public void run() {
         try {
-            String test = "this is a test message mate!";
+            //recieve ordertype string to determine which action to perform
             String orderType = (String) clientInput.readObject();
+            //condition statement for book orders
             if (orderType.equals("book")) {
                 BookOrder bo = (BookOrder) clientInput.readObject();
                 String bookMessage = sendToBookServer(bo) + "\n";
                 clientOutput.writeObject(bookMessage);
             }
+            //condition statement for movie orders
             if (orderType.equals("movie")) {
                 MovieOrder mo = (MovieOrder) clientInput.readObject();
                 String movieMessage = sendToMovieServer(mo) + "\n";
                 clientOutput.writeObject(movieMessage);
             }
 
-            clientOutput.writeObject(test);
         } catch (IOException ex) {
             Logger.getLogger(ClientConnection.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException e) {
@@ -88,6 +83,7 @@ class ClientConnection extends Thread {
 
     }
 
+    //Function to handle book server connectionto send and recieve object data
     public String sendToBookServer(BookOrder bookOrder) throws IOException, ClassNotFoundException {
         ObjectInputStream in = null;
         ObjectOutputStream out = null;
@@ -101,8 +97,9 @@ class ClientConnection extends Thread {
 
         return recievedMessage;
     }
-    
-        public String sendToMovieServer(MovieOrder movieOrder) throws IOException, ClassNotFoundException {
+
+    //function to handle movie server connection to send a recieve object data
+    public String sendToMovieServer(MovieOrder movieOrder) throws IOException, ClassNotFoundException {
         ObjectInputStream in = null;
         ObjectOutputStream out = null;
 

@@ -1,19 +1,15 @@
-
 package com.coit13229ass2;
-
-
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class ServerBook {
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         try {
             //Set Socket port number
             int serverPort = 7622;
@@ -31,8 +27,10 @@ public class ServerBook {
     }//End Main method
 
 }//End of class
+//class to facilitate connection between server coordinator and serverbook class
 
 class ClientBookConnection extends Thread {
+
     //initialise in and out data streams
     ObjectInputStream input;
     ObjectOutputStream output;
@@ -41,6 +39,7 @@ class ClientBookConnection extends Thread {
     public ClientBookConnection(Socket aClientSocket) {
 
         try {
+            //creates socket object and data serialization stream
             clientSocket = aClientSocket;
             input = new ObjectInputStream(clientSocket.getInputStream());
             output = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -51,18 +50,19 @@ class ClientBookConnection extends Thread {
         }
 
     }
+
     //run method starts thread
     public void run() {
 
-            try{
+        try {
             BookOrder order = (BookOrder) input.readObject();
-            String orderTotal = order.getResult();
-            output.writeObject(orderTotal);
-            }catch(ClassNotFoundException e){
-                e.printStackTrace();
-            }catch(IOException e){
-                e.printStackTrace();
-            }
+            String orderTotal = order.getResult();//gets result from bookOrder class
+            output.writeObject(orderTotal); //send object to server coordinator
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-}
+}//End Class
